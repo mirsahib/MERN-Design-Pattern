@@ -1,13 +1,15 @@
-import User from '../models/user.model'
+import Company from '../models/company.model'
 import extend from 'lodash/extend'
 import errorHandler from './../helpers/dbErrorHandler'
 
 const create = async (req, res) => {
-  const user = new (req.body)
+  console.log('company body',req.body)
+  const company = new Company(req.body)
+  console.log('model company',company)
   try {
-    await user.save()
+    await company.save()
     return res.status(200).json({
-      message: "Successfully signed up!"
+      message: "Company created successfully!"
     })
   } catch (err) {
     return res.status(400).json({
@@ -17,20 +19,20 @@ const create = async (req, res) => {
 }
 
 /**
- * Load user and append to req.
+ * Load company and append to req.
  */
-const userByID = async (req, res, next, id) => {
+const companyByID = async (req, res, next, id) => {
   try {
-    let user = await User.findById(id)
-    if (!user)
+    let company = await Company.findById(id)
+    if (!company)
       return res.status('400').json({
-        error: "User not found"
+        error: "company not found"
       })
-    req.profile = user
+    req.profile = company
     next()
   } catch (err) {
     return res.status('400').json({
-      error: "Could not retrieve user"
+      error: "Could not retrieve company"
     })
   }
 }
@@ -43,8 +45,8 @@ const read = (req, res) => {
 
 const list = async (req, res) => {
   try {
-    let users = await User.find().select('name email updated created')
-    res.json(users)
+    let companys = await Company.find()
+    res.json(companys)
   } catch (err) {
     return res.status(400).json({
       error: errorHandler.getErrorMessage(err)
@@ -54,13 +56,13 @@ const list = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    let user = req.profile
-    user = extend(user, req.body)
-    user.updated = Date.now()
-    await user.save()
-    user.hashed_password = undefined
-    user.salt = undefined
-    res.json(user)
+    let company = req.profile
+    company = extend(company, req.body)
+    company.updated = Date.now()
+    await company.save()
+    company.hashed_password = undefined
+    company.salt = undefined
+    res.json(company)
   } catch (err) {
     return res.status(400).json({
       error: errorHandler.getErrorMessage(err)
@@ -70,11 +72,11 @@ const update = async (req, res) => {
 
 const remove = async (req, res) => {
   try {
-    let user = req.profile
-    let deletedUser = await user.remove()
-    deletedUser.hashed_password = undefined
-    deletedUser.salt = undefined
-    res.json(deletedUser)
+    let company = req.profile
+    let deletedCompany = await company.remove()
+    deletedCompany.hashed_password = undefined
+    deletedCompany.salt = undefined
+    res.json(deletedCompany)
   } catch (err) {
     return res.status(400).json({
       error: errorHandler.getErrorMessage(err)
@@ -84,7 +86,7 @@ const remove = async (req, res) => {
 
 export default {
   create,
-  userByID,
+  companyByID,
   read,
   list,
   remove,

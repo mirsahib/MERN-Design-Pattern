@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import crypto from 'crypto'
-const UserSchema = new mongoose.Schema({
+export const UserSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
@@ -64,5 +64,10 @@ UserSchema.methods = {
     return Math.round((new Date().valueOf() * Math.random())) + ''
   }
 }
+const User = mongoose.model('User', UserSchema)
 
-export default mongoose.model('User', UserSchema)
+export default {
+  User
+}
+
+
