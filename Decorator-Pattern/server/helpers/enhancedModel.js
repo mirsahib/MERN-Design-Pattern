@@ -2,16 +2,10 @@ import mongoose from 'mongoose'
 
 const enhancedModel = (schema,properties)=>{
     let cloneSchema = schema.clone()
-    let newObj = cloneSchema.obj 
-    let schemaObj = {...newObj,...properties}
-    console.log('schemaObj',schemaObj)
-    // let enchancedSchema = new mongoose.Schema(
-    //     Object.assign({},cloneSchema))
-    //console.log('schema obj',cloneSchema)
-    cloneSchema.obj = schemaObj
-    cloneSchema.add(schemaObj)
-
+    let schemaObj = {...cloneSchema.obj,...properties}
+    cloneSchema.obj = schemaObj    
     console.log('enhanchedSchema',cloneSchema)
+
     return cloneSchema
 }
 
